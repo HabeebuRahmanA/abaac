@@ -1,0 +1,74 @@
+<?= view('manager/temp-parts/header') ?>
+
+<div class="container-fluid">
+    <div class="row">
+        <?= view('manager/temp-parts/sidebar'); ?>
+
+        <!-- Main content area -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+            <div class="container mt-4">
+                <h1>Customers List of ( <?= $manager->UserID.'-'.$manager->FirstName ?>  )</h1>
+
+                <!-- Button to add a new user and dropdowns for user control -->
+                <div class="mb-3 d-flex justify-content-between align-items-center">
+                    <a href="<?= site_url('manager/create-user') ?>" class="btn btn-success">Add User</a>
+
+                    <!-- Form to control pagination and filtering -->
+                    <div>
+                        <form action="<?= site_url('manager/users') ?>" method="get" class="form-inline">
+                            <label for="perPage" class="mr-2">Results per page:</label>
+                            <select id="perPage" name="perPage" onchange="this.form.submit()" class="form-control mr-3">
+                                <option value="5" <?= $perPage == 5 ? 'selected' : '' ?>>5</option>
+                                <option value="10" <?= $perPage == 10 ? 'selected' : '' ?>>10</option>
+                                <option value="20" <?= $perPage == 20 ? 'selected' : '' ?>>20</option>
+                                <option value="30" <?= $perPage == 30 ? 'selected' : '' ?>>30</option>
+                            </select>
+
+                            
+                            <input type="hidden" name="search" value="<?= esc($search) ?>">
+                        </form>
+                        <br> 
+                        <form action="<?= site_url('manager/users') ?>" method="get" class="form-inline">
+                            <input type="text" name="search" class="form-control mr-2" placeholder="Search users..." value="<?= esc($search) ?>" />
+                            <button type="submit" class="btn btn-primary">Search</button>
+                        </form>
+                    </div>
+                </div>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                           
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($users as $user) : ?>
+                            <tr>
+                                <td><?= $user->UserID ?></td>
+                                <td><?= $user->username ?></td>
+                                <td><?= $user->email ?></td>
+                               
+                                <td>
+                                    <a href="<?= site_url('manager/users/edit/' . $user->UserID) ?>" class="btn btn-primary btn-sm">Edit</a>
+                                    
+                                    <a href="<?= site_url('manager/users/delete/' . $user->UserID) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
+                                    
+
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <!-- Render pagination links -->
+                <?= $pager->links('default', 'vd_custom_template') ?>
+            </div>
+        </main>
+    </div>
+</div>
+
+<?= view('manager/temp-parts/footer') ?>
